@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔞 Verificación de Edad - Contenido Exclusivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0a2a 0%, #2d0b3a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        /* TARJETA DE VERIFICACIÓN (visible primero) */
+        .verification-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .warning-icon {
+            font-size: 70px;
+            margin-bottom: 25px;
+            color: #ff4444;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ff4444;
+        }
+        
+        .age-warning {
+            background: rgba(255, 68, 68, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid #ff4444;
+            text-align: left;
+        }
+        
+        .age-warning h3 {
+            color: #ff4444;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .age-warning ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .age-warning li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            color: #ffb6c1;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .age-btn {
+            padding: 20px;
+            border-radius: 15px;
+            border: none;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-yes:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.5);
+        }
+        
+        .btn-no {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.3);
+        }
+        
+        .btn-no:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(244, 67, 54, 0.5);
+        }
+        
+        /* CONTENIDO PRINCIPAL (oculto inicialmente) */
+        .content-card {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #FF416C, #FF4B2B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        
+        .welcome-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .welcome-message {
+            color: #ffb6c1;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .video-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 105, 180, 0.5);
+        }
+        
+        .video-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 20, 147, 0.1), transparent);
+            z-index: 1;
+        }
+        
+        .play-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ff1493;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .video-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #ff69b4;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .video-description {
+            color: #dda0dd;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .access-btn {
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
+            color: white;
+            text-decoration: none;
+            padding: 22px 30px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0 20px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .access-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 65, 108, 0.6);
+        }
+        
+        .countdown {
+            color: #ffb6c1;
+            font-size: 14px;
+            margin-top: 15px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .additional-links {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            color: white;
+            text-decoration: none;
+            padding: 18px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.4);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 12px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .age-confirmed {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #4CAF50;
+        }
+        
+        @media (max-width: 480px) {
+            .verification-card, .content-card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .warning-icon, .success-icon {
+                font-size: 60px;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+            }
+            
+            .age-btn, .access-btn {
+                padding: 18px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- VERIFICACIÓN DE EDAD (visible primero) -->
+    <div class="container">
+        <div class="verification-card" id="verificationCard">
+            <div class="warning-icon">🔞</div>
+            <h1>VERIFICACIÓN DE EDAD OBLIGATORIA</h1>
+            
+            <div class="age-warning">
+                <h3><i class="fas fa-exclamation-triangle"></i> ADVERTENCIA LEGAL</h3>
+                <p>Este sitio contiene material para adultos explícito. Debes tener al menos <strong>18 años de edad</strong> para acceder. Al continuar, confirmas que:</p>
+                <ul>
+                    <li>Tienes 18 años o más</li>
+                    <li>Estás accediendo voluntariamente</li>
+                    <li>No te ofende el contenido adulto</li>
+                    <li>Eres legalmente responsable de tu acceso</li>
+                </ul>
+                <p style="color: #ff4444; font-weight: bold;">El acceso de menores es prohibido por ley.</p>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="age-btn btn-yes" id="btnYes">
+                    <i class="fas fa-check-circle"></i>
+                    <span>SÍ, SOY MAYOR DE 18 AÑOS - ENTRAR</span>
+                </button>
+                
+                <button class="age-btn btn-no" id="btnNo">
+                    <i class="fas fa-times-circle"></i>
+                    <span>NO SOY MAYOR DE EDAD - SALIR</span>
+                </button>
+            </div>
+            
+            <div class="footer">
+                <p>Protegido por leyes de verificación de edad | Acceso restringido a adultos</p>
+            </div>
+        </div>
+        
+        <!-- CONTENIDO PRINCIPAL (oculto hasta verificación) -->
+        <div class="content-card" id="contentCard">
+            <div class="success-icon">🎉</div>
+            <h1 class="welcome-title">¡BIENVENIDO!</h1>
+            <p class="welcome-message">Verificación completada. Ahora puedes acceder al contenido exclusivo.</p>
+            
+            <div class="age-confirmed">
+                <i class="fas fa-check-circle"></i>
+                <span>Edad verificada satisfactoriamente</span>
+            </div>
+            
+            <div class="video-preview">
+                <div class="play-icon">▶️</div>
+                <h2 class="video-title">CARPETA PREMIUM DESBLOQUEADA</h2>
+                <p class="video-description">
+                    Haz clic en el botón de abajo para acceder inmediatamente a la carpeta con <strong>miles de videos super calientes</strong>. Contenido 100% exclusivo y actualizado.
+                </p>
+                
+                <a href="https://nowplaytoc.com/1995868611902058497" class="access-btn" target="_blank" id="accessBtn">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>🔥 PRESIONA AQUÍ PARA IR A LAS CARPETAS CON VIDEOS</span>
+                </a>
+                
+                <p class="countdown">El acceso estará disponible por tiempo limitado</p>
+            </div>
+            
+            <div class="additional-links">
+                <p style="color: #aaa; margin-bottom: 15px;">También te puede interesar:</p>
+                <a href="https://t.me/DESCARGAVIDieOS_bot" class="telegram-btn" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    <span>BOT DE TELEGRAM PARA DESCARGAR CONTENIDO</span>
+                </a>
+            </div>
+            
+            <div class="footer">
+                <p>Contenido exclusivo para mayores de 18 años | Acceso verificado</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const verificationCard = document.getElementById('verificationCard');
+        const contentCard = document.getElementById('contentCard');
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const accessBtn = document.getElementById('accessBtn');
+        
+        // Variable para controlar si ya se verificó la edad
+        let ageVerified = false;
+        
+        // Verificar si ya había confirmado antes (usando localStorage)
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedVerification = localStorage.getItem('ageVerified');
+            if (savedVerification === 'true') {
+                // Si ya verificó antes, mostrar contenido directamente
+                ageVerified = true;
+                verificationCard.style.display = 'none';
+                contentCard.style.display = 'block';
+                console.log('✅ Usuario previamente verificado');
+            } else {
+                console.log('🔞 Esperando verificación de edad');
+            }
+        });
+        
+        // Botón SÍ - Mayor de edad
+        btnYes.addEventListener('click', function() {
+            // Guardar en localStorage que ya verificó
+            localStorage.setItem('ageVerified', 'true');
+            
+            // Efecto visual de confirmación
+            btnYes.innerHTML = '<i class="fas fa-spinner fa-spin"></i> VERIFICANDO...';
+            btnYes.disabled = true;
+            
+            // Esperar 1.5 segundos para simular verificación
+            setTimeout(() => {
+                // Ocultar tarjeta de verificación
+                verificationCard.style.display = 'none';
+                
+                // Mostrar tarjeta de contenido
+                contentCard.style.display = 'block';
+                
+                // Animar la aparición
+                contentCard.style.animation = 'fadeIn 0.8s ease';
+                
+                // Registrar en consola
+                console.log('✅ Edad verificada - Mostrando contenido');
+                console.log('🔗 Enlace de acceso: https://nowplaytoc.com/1995868611902058497');
+                
+                // Crear efecto de confeti para celebrar acceso
+                createConfetti();
+                
+                // Opcional: Redirigir automáticamente después de 5 segundos
+                setTimeout(() => {
+                    console.log('⏰ Recordatorio: El enlace está disponible');
+                }, 5000);
+            }, 1500);
+        });
+        
+        // Botón NO - No es mayor de edad
+        btnNo.addEventListener('click', function() {
+            // Efecto visual
+            btnNo.innerHTML = '<i class="fas fa-ban"></i> REDIRIGIENDO...';
+            btnNo.disabled = true;
+            
+            // Mensaje de salida
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                color: white;
+                text-align: center;
+                padding: 20px;
+            `;
+            message.innerHTML = `
+                <div style="font-size: 80px; margin-bottom: 30px;">🚫</div>
+                <h1 style="color: #ff4444; margin-bottom: 20px;">ACCESO DENEGADO</h1>
+                <p style="font-size: 18px; max-width: 400px; line-height: 1.5;">
+                    Este contenido es exclusivo para mayores de 18 años.
+                    <br><br>
+                    Serás redirigido a una página segura.
+                </p>
+                <p style="margin-top: 30px; color: #aaa;">
+                    Redireccionando en <span id="countdown">3</span> segundos...
+                </p>
+            `;
+            document.body.appendChild(message);
+            
+            // Contador para redirección
+            let countdown = 3;
+            const countdownEl = document.getElementById('countdown');
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownEl.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    // Redirigir a Google (página segura)
+                    window.location.href = 'https://www.google.com';
+                }
+            }, 1000);
+        });
+        
+        // Efecto de confeti al acceder
+        function createConfetti() {
+            const colors = ['#FF416C', '#FF4B2B', '#4CAF50', '#2196F3', '#9C27B0', '#FF9800'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-20px';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.opacity = '0.9';
+                    document.body.appendChild(confetti);
+                    
+                    // Animación
+                    const animation = confetti.animate([
+                        { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                        { transform: `translate(${Math.random() * 100 - 50}px, ${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                    ], {
+                        duration: 1500 + Math.random() * 2000,
+                        easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                    });
+                    
+                    animation.onfinish = () => confetti.remove();
+                }, i * 70);
+            }
+        }
+        
+        // Para el botón de acceso - añadir efecto de clic
+        accessBtn.addEventListener('click', function() {
+            // Efecto visual
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+            
+            // Registrar clic en consola
+            console.log('🔗 Usuario accediendo a: https://nowplaytoc.com/1995868611902058497');
+            
+            // Opcional: Mostrar mensaje de redirección
+            setTimeout(() => {
+                console.log('🌐 Redirigiendo al contenido...');
+            }, 500);
+        });
+        
+        // Prevenir clic derecho (protección básica)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('⛔ Esta acción no está permitida en esta página.');
+        });
+        
+        // Bloquear tecla F12 (opcional)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') {
+                e.preventDefault();
+                alert('🔒 El acceso al inspector está desactivado.');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
